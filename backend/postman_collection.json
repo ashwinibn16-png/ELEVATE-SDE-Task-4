@@ -1,0 +1,224 @@
+{
+  "info": {
+    "_postman_id": "c8a41dbb-2026-4e5a-a123-elevatetask3",
+    "name": "ELEVATE-SDE-Task-3 Certificate Platform API",
+    "description": "Complete Postman collection for ELEVATE SDE Internship Task 3: Certificate Issuing & Verification Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sampleApplicationId",
+      "value": "APP-2026-EXAMPLE",
+      "type": "string"
+    },
+    {
+      "key": "sampleCertificateId",
+      "value": "CERT-2026-EXAMPLE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "1. Citizen - Request Certificate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Example Citizen\",\n  \"phone\": \"9876543210\",\n  \"gender\": \"Female\",\n  \"city\": \"Bengaluru\",\n  \"state\": \"Karnataka\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/applications",
+          "host": ["{{baseUrl}}"],
+          "path": ["applications"]
+        }
+      }
+    },
+    {
+      "name": "2. Citizen - Track Application",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/applications/track/{{sampleApplicationId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["applications", "track", "{{sampleApplicationId}}"]
+        }
+      }
+    },
+    {
+      "name": "3. Public - Verify Certificate",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/certificates/verify/{{sampleCertificateId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["certificates", "verify", "{{sampleCertificateId}}"]
+        }
+      }
+    },
+    {
+      "name": "4. Admin - Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.token) {",
+              "    pm.collectionVariables.set(\"adminToken\", jsonData.token);",
+              "    console.log(\"Saved admin token to collection variables!\");",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"AdminPass@123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/admin/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "login"]
+        }
+      }
+    },
+    {
+      "name": "5. Admin - List Applications",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/applications?status=Pending",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "applications"],
+          "query": [
+            {
+              "key": "status",
+              "value": "Pending"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Admin - Approve Application",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/applications/{{sampleApplicationId}}/approve",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "applications", "{{sampleApplicationId}}", "approve"]
+        }
+      }
+    },
+    {
+      "name": "7. Admin - Reject Application",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Incomplete residence documentation submitted.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/admin/applications/{{sampleApplicationId}}/reject",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "applications", "{{sampleApplicationId}}", "reject"]
+        }
+      }
+    },
+    {
+      "name": "8. Admin - List Certificates",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/certificates",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "certificates"]
+        }
+      }
+    },
+    {
+      "name": "9. Admin - Revoke Certificate",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/admin/certificates/{{sampleCertificateId}}/revoke",
+          "host": ["{{baseUrl}}"],
+          "path": ["admin", "certificates", "{{sampleCertificateId}}", "revoke"]
+        }
+      }
+    }
+  ]
+}

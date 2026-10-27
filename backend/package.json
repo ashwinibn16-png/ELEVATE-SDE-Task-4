@@ -1,0 +1,44 @@
+{
+  "name": "elevate-sde-task-3",
+  "version": "1.0.0",
+  "description": "Certificate Issuing & Verification Platform Backend for ELEVATE SDE Internship Task 3",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed:admin": "node database/seedAdmin.js",
+    "db:init": "node database/initDb.js",
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --detectOpenHandles"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "jwt",
+    "certificate-verification",
+    "rest-api"
+  ],
+  "author": "Ashwini B N",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 10000
+  }
+}
